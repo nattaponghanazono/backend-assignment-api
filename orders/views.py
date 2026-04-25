@@ -97,7 +97,7 @@ def update_payment(request, pk):
 
     order.paid_amount = request.data.get("paid_amount", 0)
     order.status = "paid"
-    order.paid_at = timezone.now()   # ✔ ใช้ได้แล้ว
+    order.paid_at = timezone.now()   
 
     order.save()
 
