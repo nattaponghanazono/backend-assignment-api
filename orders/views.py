@@ -15,7 +15,7 @@ def get_data(request):
 
 @api_view(['GET'])
 def get_orders(request):
-    orders = Order.objects.select_related('buyer').prefetch_related('items')
+    orders = Order.objects.select_related('buyer').prefetch_related('items').prefetch_related('payment')
     print(orders.query)
     serializer = OrderSerializer(orders, many=True)
     return Response(serializer.data)

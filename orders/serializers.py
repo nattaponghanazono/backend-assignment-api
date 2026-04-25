@@ -3,29 +3,19 @@ from users.models import User
 from products.models import Product
 from  order_items.models import OrderItem
 from .models import Order
+from users.serializers import UserSerializer
+from order_items.serializers import OrderitmemsSerializer
+from payments.serializers import PaymentSerializer
 
 
-class UserSerializer(serializers.ModelSerializer): #user 
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'address']
-
-class AllProductSerializer(serializers.ModelSerializer): #product  join users 
-    seller = UserSerializer(read_only = True)
-    class Meta:
-        model = Product
-        fields = ['id' , 'title' , 'unit_price' , 'quantitys'  ,'seller']
-
-class OrderitmemsSerializer(serializers.ModelSerializer): #order_itmes inner joing product
-    product = AllProductSerializer(read_only=True)
-    class Meta:
-        model = OrderItem
-        fields = ['id', 'quantity', 'price', 'order_id', 'product']
 
 
-class OrderSerializer(serializers.ModelSerializer): #user inner join (order_itmes inner joing product)
+
+class OrderSerializer(serializers.ModelSerializer):
     buyer = UserSerializer(read_only=True) 
     items = OrderitmemsSerializer(many=True, read_only=True)
+    payment = PaymentSerializer(many = True , read_only = True)
     class Meta:
         model = Order
-        fields = ['id', 'buyer', 'items', 'total_amount', 'status', 'created_at']
+        fields = ['id', 'buyer', 'items', 'total_amount', 'status', 'created_at' , 'payment']
+
