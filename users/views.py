@@ -34,3 +34,30 @@ def create_user(request):
         return Response(serializer.data, status=201)
 
     return Response(serializer.errors, status=400)
+
+
+@api_view(['PUT', 'PATCH'])
+def update_user(request, pk):
+    try:
+        user = User.objects.get(id=pk)
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=404)
+
+    serializer = UserSerializer(user, data=request.data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+
+    return Response(serializer.errors, status=400)
+
+
+@api_view(['DELETE'])
+def delete_user(request, pk):
+    try:
+        user = User.objects.get(id=pk)
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=404)
+
+    user.delete()
+    return Response({"message": "Deleted successfully"}, status=204)

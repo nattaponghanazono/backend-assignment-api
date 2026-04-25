@@ -1,8 +1,14 @@
-
 from rest_framework import serializers
-from .models import Payment
-from orders.serializers import OrderitmemsSerializer
+from payments.models import Payment
 
-class PaymentSerializer(serializers.ModelSerializer):  
+class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['id' , 'order_id' , 'amount' , 'paid_at' , 'method']
+        model = Payment
+        fields = '__all__'
+
+
+
+class PaymentAllSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ['id', 'amount', 'paid_at', 'method']

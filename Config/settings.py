@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'orders',
     'order_items',
     'payments',
+    'stock_movements',
 
 ]
 
