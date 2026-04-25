@@ -20,8 +20,6 @@ from users import views as user_views
 from products import views as product_views
 from orders import views as orders_views
 from order_items import views as order_items_views
-from payments import views as payments_views
-from stock_movements import views as stock_movements_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -41,9 +39,12 @@ urlpatterns = [
 
     # Orders
     path('orders/' , orders_views.get_data),
+    path('orders/<int:pk>/invoice/' , orders_views.invoice),
     path('orders/<int:pk>/' , orders_views.get_orders),
     path('orders/create/' , orders_views.create_order),
-    path('orders/update/<int:pk>/' , orders_views.update_order),     
+    path('orders/update/<int:pk>/' , orders_views.update_order),
+    path('orders/update_payment/<int:pk>/' , orders_views.update_payment),
+    
     path('orders/delete/<int:pk>/' , orders_views.delete_order),
 
 
@@ -54,18 +55,5 @@ urlpatterns = [
     path('order_items/update/<int:pk>/' , order_items_views.update_order_item),
     path('order_items/delete/<int:pk>/' , order_items_views.delete_order_item),
 
-    #Payments
-    path('payments/' , payments_views.get_payments),    
-    path('payments/<int:pk>/' , payments_views.get_payment),
-    path('payments/create/' , payments_views.create_payment),
-    path('payments/update/<int:pk>/' , payments_views.update_payment),
-    path('payments/delete/<int:pk>/' , payments_views.delete_payment),
 
-
-    #stock_movements
-    path('stock_movements/' , stock_movements_views.get_stock_movements),
-    path('stock_movements/<int:pk>/' , stock_movements_views.get_stock_movement),
-    path('stock_movements/create/' , stock_movements_views.create_stock_movement),
-    path('stock_movements/update/<int:pk>/' , stock_movements_views.update_stock_movement),
-    path('stock_movements/delete/<int:pk>/' , stock_movements_views.delete_stock_movement), 
 ]

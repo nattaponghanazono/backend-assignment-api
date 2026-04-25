@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import OrderItem
 from .serializers import OrderItemsAllSerializer , OrderitmemsSerializer
+from products.models import Product
 
 
 
@@ -29,14 +30,21 @@ def get_order_item(request, pk):
 
 
 @api_view(['POST'])
-def create_order_item(request):         
-    serializer = OrderitmemsSerializer(data=request.data)
+def create_order_item(request):
+    data = request.data.copy()
+
+    product = Product.objects.get(id=data['product'])
+    
+    # 🔥 backend set price เอง (สำคัญ)
+    data['price'] = product.unit_price
+
+    serializer = OrderitmemsSerializer(data=data)
 
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=201)
 
-    return Response(serializer.errors, status=400)      
+    return Response(serializer.errors, status=400)
 
 
 @api_view(['PUT', 'PATCH'])
