@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from users import views as user_views
 from products import views as product_views
+from orders import views as orders_views
 
 
 urlpatterns = [
@@ -31,4 +32,8 @@ urlpatterns = [
     # PRODUCTS get_products_by_seller
     path('products/', product_views.get_products),
     path('serch/products/<int:pk>', product_views.get_products_by_seller),
+
+    # Order
+    path('orders' , orders_views.get_data),
+    path('order/' , orders_views.get_orders)
 ]
