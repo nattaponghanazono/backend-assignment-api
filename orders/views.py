@@ -13,6 +13,8 @@ from order_items.models import OrderItem
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 # Create your views here. OrderSerializers
+
+
 @api_view(['GET'])
 def get_data(request):
     order = Order.objects.select_related('buyer').all()
@@ -65,18 +67,15 @@ def invoice(request, pk):
     return Response(data)
 
 
-
-
-
 @api_view(['POST'])
 def create_order(request):
     serializer = OrderSerializer(data=request.data)
-
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=201)
+        return Response({"message": "Order created successfully"}, status=201)
 
     return Response(serializer.errors, status=400)  
+
 
 @api_view(['PUT', 'PATCH'])
 def update_order(request, pk):          
@@ -89,10 +88,9 @@ def update_order(request, pk):
 
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data)
+        return Response({"message": "Order updated successfully"})
 
     return Response(serializer.errors, status=400)
-
 
 
 @api_view(['DELETE'])
@@ -126,7 +124,6 @@ def shipping_label(request, pk):
         total_amount += subtotal
 
         item_list.append({
-            "product_id": item.product.id,
             "product_title": item.product.title,
             "quantity": item.quantity,
             "unit_price": float(item.price),
@@ -140,7 +137,6 @@ def shipping_label(request, pk):
 
         "buyer": {
             "username": order.buyer.username,
-            "email": order.buyer.email,
             "address": order.buyer.address,
         },
 

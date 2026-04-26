@@ -29,7 +29,7 @@ def create_product(request):
 
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=201)
+        return Response({"message": "Product created successfully"}, status=201)
 
     return Response(serializer.errors, status=400)
 
@@ -80,9 +80,6 @@ def update_stock(request, pk):
         product.save()
 
         return Response({
-            "id": product.id,
-            "title": product.title,
-            "quantitys": product.quantitys,
             "message": "Stock added successfully"
         })
 

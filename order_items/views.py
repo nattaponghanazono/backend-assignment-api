@@ -66,7 +66,7 @@ def create_order_item(request):
             serializer.save()
             results.append(serializer.data)
 
-    return Response(results, status=201)
+    return Response({"message": "Order items created successfully"}, status=201)
 
 
 @api_view(['PUT', 'PATCH'])
@@ -80,7 +80,7 @@ def update_order_item(request, pk):
 
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data)
+        return Response({"message": "Order item updated successfully"})
 
     return Response(serializer.errors, status=400)      
 
