@@ -170,7 +170,7 @@ def ship_order(request, pk):
             "tracking_number": f"TH-{order.id:04d}"
         })
 
-    # 🔥 GROUP PRODUCT FIRST
+    # GROUP PRODUCT FIRST
     product_map = defaultdict(int)
 
     for item in items:
@@ -178,7 +178,7 @@ def ship_order(request, pk):
 
     with transaction.atomic():
 
-        # ✔ check stock first
+        # check stock first
         for product, qty in product_map.items():
             if product.quantitys < qty:
                 return Response({
@@ -187,7 +187,7 @@ def ship_order(request, pk):
                     "required": qty
                 }, status=400)
 
-        # ✔ deduct stock once per product
+        # deduct stock once per product
         for product, qty in product_map.items():
             product.quantitys -= qty
             product.save()
@@ -207,7 +207,7 @@ def ship_order(request, pk):
 def update_payment(request, pk):
     order = get_object_or_404(Order, pk=pk)
 
-    # ❗ กันจ่ายซ้ำ
+    # กันจ่ายซ้ำ
     if order.status == "paid":
         return Response({
             "message": "Order already paid",
@@ -215,7 +215,7 @@ def update_payment(request, pk):
             "status": order.status
         })
 
-    # ❗ กันจ่ายหลังส่งของ
+    # กันจ่ายหลังส่งของ
     if order.status == "shipped":
         return Response({
             "error": "Order already shipped, cannot pay"
