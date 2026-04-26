@@ -1,2 +1,2 @@
 # backend-assignment-api
-โปรเจกต์แบบทดสอบ Backend API พัฒนาด้วย Go (Gin) และ PostgreSQL
+โปรเจกต์แบบทดสอบ Backend API พัฒนาด้วย Python (Django web framework) และ PostgreSQL
