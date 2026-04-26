@@ -5,6 +5,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import OrderItem
+from .models import Order
 from .serializers import OrderItemsAllSerializer , OrderitmemsSerializer
 from products.models import Product
 
@@ -29,22 +30,43 @@ def get_order_item(request, pk):
 
 
 
+
 @api_view(['POST'])
 def create_order_item(request):
-    data = request.data.copy()
+    order_id = request.data.get("order")
+    items = request.data.get("items")
 
-    product = Product.objects.get(id=data['product'])
-    
-    # 🔥 backend set price เอง (สำคัญ)
-    data['price'] = product.unit_price
+    try:
+        order = Order.objects.get(id=order_id)
+    except Order.DoesNotExist:
+        return Response({"error": "Order not found"}, status=404)
 
-    serializer = OrderitmemsSerializer(data=data)
+    if order.status in ["paid", "shipped"]:
+        return Response({"error": "Cannot modify order"}, status=400)
 
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=201)
+    results = []
 
-    return Response(serializer.errors, status=400)
+    for item in items:
+        product = Product.objects.get(id=item['product'])
+        quantity = int(item['quantity'])
+
+        if product.quantitys < quantity:
+            return Response({
+                "error": f"Insufficient stock for {product.title}"
+            }, status=400)
+
+        serializer = OrderitmemsSerializer(data={
+            "order": order_id,
+            "product": product.id,
+            "quantity": quantity,
+            "price": product.unit_price
+        })
+
+        if serializer.is_valid():
+            serializer.save()
+            results.append(serializer.data)
+
+    return Response(results, status=201)
 
 
 @api_view(['PUT', 'PATCH'])

@@ -35,18 +35,20 @@ urlpatterns = [
     path('products/', product_views.get_products),
     path('products/create/', product_views.create_product),
     path('products/update/<int:pk>/', product_views.update_product),
+    path('products/<int:pk>/stock/', product_views.update_stock),
     path('products/delete/<int:pk>/', product_views.delete_product),
+
 
     # Orders
     path('orders/' , orders_views.get_data),
     path('orders/<int:pk>/invoice/' , orders_views.invoice),
+    path('orders/<int:pk>/shipping-label/' , orders_views.shipping_label),
     path('orders/<int:pk>/' , orders_views.get_orders),
     path('orders/create/' , orders_views.create_order),
+    path('orders/<int:pk>/ship/', orders_views.ship_order),
     path('orders/update/<int:pk>/' , orders_views.update_order),
     path('orders/update_payment/<int:pk>/' , orders_views.update_payment),
-    
     path('orders/delete/<int:pk>/' , orders_views.delete_order),
-
 
     #Order_items
     path('order_items/' , order_items_views.get_order_items),

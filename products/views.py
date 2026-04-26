@@ -56,4 +56,35 @@ def delete_product(request, pk):
         return Response({"error": "Product not found"}, status=404)
 
     product.delete()
-    return Response(status=204) 
+    return Response(status=204)
+
+@api_view(['PUT', 'PATCH'])
+def update_stock(request, pk):
+    try:
+        product = Product.objects.get(pk=pk)
+    except Product.DoesNotExist:
+        return Response({"error": "Product not found"}, status=404)
+    
+    qty = request.data.get("quantitys")
+
+    if qty is None:
+        return Response({"error": "quantitys field is required"}, status=400)
+
+    try:
+        qty = int(qty)
+
+        if qty < 0:
+            return Response({"error": "quantity must be >= 0"}, status=400)
+
+        product.quantitys += qty   
+        product.save()
+
+        return Response({
+            "id": product.id,
+            "title": product.title,
+            "quantitys": product.quantitys,
+            "message": "Stock added successfully"
+        })
+
+    except (ValueError, TypeError):
+        return Response({"error": "quantitys must be a valid integer"}, status=400)
